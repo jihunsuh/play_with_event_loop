@@ -1,3 +1,50 @@
+#alert_modal_background {
+  display: none;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 128, 128, 0.3);
+}
+
+#alert_modal {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 3px solid #888;
+  width: 40%;
+  height: 30%;
+  text-align: center;
+  font-size: 60px;
+  color: #2c84b0;
+  transition: width 0.2s, height 0.2s;
+}
+
+#alert_message {
+  width: min-content;
+  height: min-content;
+  margin: 60px auto;
+  text-align: center;
+  font-size: 35px;
+  color: black;
+}
+
+#alert_modal_close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+#alert_modal_close:hover,
+#alert_modal_close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .variable,
 .function {
   border: 3px solid #e5e500;
@@ -25,9 +72,14 @@
 
 #add {
   width: auto;
-  padding-left: 27%;
   border: 1px solid black;
   height: 7%;
+}
+
+#add_variable,
+#add_function {
+  margin: 0px auto;
+  width: max-content;
 }
 
 #codes {
@@ -79,6 +131,12 @@
   height: 60.5%;
   position: relative;
   margin-top: 8%;
+}
+
+#variable_boolean {
+  color: blue;
+  width: 153px;
+  display: none;
 }
 
 #call_stack {

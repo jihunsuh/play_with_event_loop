@@ -162,8 +162,10 @@ document.getElementById("submit_variable").onclick = (e) => {
   let name = document.getElementById("variable_name").value;
   let value = name;
 
-  let variable = new VARIABLE(name, value);
-  variable.setNode("#codes");
+  if (name) {
+    let variable = new VARIABLE(name, value);
+    variable.setNode("#codes");
+  }
 
   document.getElementById("variable_name").value = "";
 };
@@ -173,8 +175,10 @@ document.getElementById("submit_function").onclick = (e) => {
   let name = document.getElementById("function_name").value;
   let value = (el) => el;
 
-  let func = new FUNCTION(name, value);
-  func.setNode("#codes");
+  if (name) {
+    let func = new FUNCTION(name, value);
+    func.setNode("#codes");
+  }
 
   document.getElementById("function_name").value = "";
 };
@@ -256,5 +260,49 @@ document.getElementById("submit_codes").onclick = (e) => {
     if (children[i].object instanceof FUNCTION) {
       children[i].object.execute();
     }
+  }
+};
+
+document.getElementById("type_variable").onchange = (e) => {
+  if (e.target.value === "boolean") {
+    document.getElementById("variable_name").style.display = "none";
+    document.getElementById("variable_boolean").style.display = "inline-block";
+  } else {
+    document.getElementById("variable_name").style.display = "inline-block";
+    document.getElementById("variable_boolean").style.display = "none";
+  }
+};
+
+let alertStack = [];
+
+function modal_open() {
+  document.getElementById("alert_message").innerText = alertStack.shift();
+  document.getElementById("alert_modal_background").style.display = "block";
+}
+
+function modal_close() {
+  if (alertStack.length !== 0) {
+    modal_open();
+  } else {
+    document.getElementById("alert_modal_background").style.display = "";
+    document.getElementById("alert_message").innerText = "";
+  }
+}
+
+document.getElementById("alert_modal_close").onclick = (e) => {
+  e.preventDefault();
+  modal_close();
+};
+
+window.onclick = function(event) {
+  if (event.target == document.getElementById("alert_modal_background")) {
+    modal_close();
+  }
+};
+
+window.alert = function(message) {
+  alertStack.push(message);
+  if (document.getElementById("alert_modal_background").style.display === "") {
+    modal_open();
   }
 };

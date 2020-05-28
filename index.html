@@ -12,6 +12,15 @@
       <div id="playground">
         <div id="add">
           <div id="add_variable">
+            <select id="type_variable">
+              <option value="number">Number</option>
+              <option value="string">String</option>
+              <option value="boolean">Boolean</option>
+            </select>
+            <select id="variable_boolean">
+              <option value="true">true</option>
+              <option value="false">false</option>
+            </select>
             <input id="variable_name" type="text" />
             <button id="submit_variable">ADD VARIABLE</button>
           </div>
@@ -33,8 +42,14 @@
         <div id="web_api"></div>
         <div id="callback_queue"></div>
       </div>
-
-      <script src="./script.js"></script>
     </div>
+    <div id="alert_modal_background">
+      <div id="alert_modal">
+        <span id="alert_modal_close">&times;</span>
+        ALERT!
+        <div id="alert_message"></div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
   </body>
 </html>
