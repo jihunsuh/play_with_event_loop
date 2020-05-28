@@ -10,11 +10,11 @@ class VARIABLE {
   }
 
   setNode(location) {
+    // DOM NODE를 만드는 함수
     if (!document.querySelector(location)) throw "LOCATION이 정확하지 않음. -VARIABLE";
 
     let { $node, name } = this;
     if (!$node) {
-      // $node가 없으면 html element를 만든다.
       $node = document.createElement("div");
       $node.this = this;
       $node.id = name;
@@ -56,10 +56,12 @@ class VARIABLE {
           } catch (error) {}
         }
       };
+      this.$node = $node;
     }
     //location에 추가
-    document.querySelector(location).appendChild($node);
+    document.querySelector(location).appendChild(this.$node);
   }
+
   setValue(value) {
     // value를 할당한다.
     if (typeof value === "function")
@@ -78,7 +80,7 @@ class FUNCTION {
 
     this.name = name;
     this.callback = callback;
-    this.params = [];
+    this.ids = [];
   }
 
   setNode(location) {
@@ -128,6 +130,7 @@ class FUNCTION {
           } catch (error) {}
         }
       };
+      this.$node = $node;
     }
     document.querySelector(location).appendChild($node);
   }
@@ -139,21 +142,24 @@ class FUNCTION {
   }
 
   execute() {
-    for (let i of this.params) {
-      if (this.params[i] instanceof FUNCTION) {
-        this.params[i] = this.params[i].execute();
-      } else if (this.params[i] instanceof VARIABLE) {
-        this.params[i] = this.params[i].value;
+    let children = this.$node.children;
+    let params = [];
+    for (let i = 0; i < children.length; i++) {
+      console.log(children[i].this);
+      if (children[i].this instanceof FUNCTION) {
+        params.push(children[i].this.execute());
+      } else if (children[i].this instanceof VARIABLE) {
+        params.push(children[i].this.value);
       }
     }
-    return this.trigger(...this.params);
+    return this.callback(...params);
   }
 }
 
 document.getElementById("submit_variable").onclick = (e) => {
   e.preventDefault();
   let name = document.getElementById("variable_name").value;
-  let value = Math.floor(Math.random() * 10);
+  let value = name;
 
   let variable = new VARIABLE(name, value);
   variable.setNode("#playground");
@@ -164,7 +170,7 @@ document.getElementById("submit_variable").onclick = (e) => {
 document.getElementById("submit_function").onclick = (e) => {
   e.preventDefault();
   let name = document.getElementById("function_name").value;
-  let value = () => {};
+  let value = (el) => el;
 
   let func = new FUNCTION(name, value);
   func.setNode("#playground");
@@ -204,10 +210,25 @@ document.getElementById("testing").ondrop = (e) => {
   }
 };
 
-let alert_F = new FUNCTION("alert", (text) => {
+let alert_F = new FUNCTION("alert", (...text) => {
   alert(text);
 });
 alert_F.setNode("#playground");
+
+let alert_F2 = new FUNCTION("alert2", (...text) => {
+  alert(text);
+});
+alert_F2.setNode("#playground");
+
+let alert_F3 = new FUNCTION("alert3", (...text) => {
+  alert(text);
+});
+alert_F3.setNode("#playground");
+
+let alert_F4 = new FUNCTION("alert4", (...text) => {
+  alert(text);
+});
+alert_F4.setNode("#playground");
 
 let upperCase_F = new FUNCTION("upperCase", (text) => {
   if (typeof text === "string") {
@@ -217,3 +238,22 @@ let upperCase_F = new FUNCTION("upperCase", (text) => {
   }
 });
 upperCase_F.setNode("#playground");
+
+let lowerCase_F = new FUNCTION("lowerCase", (text) => {
+  if (typeof text === "string") {
+    return text.toLowerCase();
+  } else {
+    return text;
+  }
+});
+lowerCase_F.setNode("#playground");
+
+document.getElementById("submit_codes").onclick = (e) => {
+  e.preventDefault();
+  let children = document.getElementById("testing").children;
+  for (let i = 0; i < children.length; i++) {
+    if (children[i].this instanceof FUNCTION) {
+      children[i].this.execute();
+    }
+  }
+};
