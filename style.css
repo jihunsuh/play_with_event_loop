@@ -32,6 +32,15 @@
   color: black;
 }
 
+#alert_function {
+  font-size: 35px;
+  color: blue;
+  text-align: center;
+  width: min-content;
+  height: min-content;
+  margin: 0 auto;
+}
+
 #alert_modal_close {
   color: #aaa;
   float: right;

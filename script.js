@@ -81,7 +81,6 @@ class FUNCTION {
 
     this.name = name;
     this.callback = callback;
-    this.ids = [];
   }
 
   setNode(location) {
@@ -217,21 +216,25 @@ document.getElementById("testing").ondrop = (e) => {
 
 let alert_F = new FUNCTION("alert", (...text) => {
   alert(text);
+  return text;
 });
 alert_F.setNode("#codes");
 
 let alert_F2 = new FUNCTION("alert2", (...text) => {
   alert(text);
+  return text;
 });
 alert_F2.setNode("#codes");
 
 let alert_F3 = new FUNCTION("alert3", (...text) => {
   alert(text);
+  return text;
 });
 alert_F3.setNode("#codes");
 
 let alert_F4 = new FUNCTION("alert4", (...text) => {
   alert(text);
+  return text;
 });
 alert_F4.setNode("#codes");
 
@@ -273,15 +276,15 @@ document.getElementById("type_variable").onchange = (e) => {
   }
 };
 
-let alertStack = [];
+window.alertStack = [];
 
 function modal_open() {
-  document.getElementById("alert_message").innerText = alertStack.shift();
+  document.getElementById("alert_message").innerText = window.alertStack.shift();
   document.getElementById("alert_modal_background").style.display = "block";
 }
 
 function modal_close() {
-  if (alertStack.length !== 0) {
+  if (window.alertStack.length !== 0) {
     modal_open();
   } else {
     document.getElementById("alert_modal_background").style.display = "";
@@ -306,3 +309,21 @@ window.alert = function(message) {
     modal_open();
   }
 };
+
+// class CALLSTACK {
+//   constructor(location) {
+//     if (!document.querySelector(location)) throw "내가 있을 자리가 보이지 않음. -CALLSTACK";
+//     this.$spot = document.querySelector(location);
+//     this.stack = [];
+//   }
+
+//   execute(location, step) {
+//     if (!document.querySelector(location)) throw "내가 실행할 블록들이 보이지 않음. -CALLSTACK";
+//     let children = document.querySelector(location).children;
+//     for (let i = 0; i < children.length; i++) {
+//       if (children[i].object instanceof FUNCTION) {
+//       } else if (children[i].object instanceof VARIABLE) {
+//       }
+//     }
+//   }
+// }
