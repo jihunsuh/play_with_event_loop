@@ -1,0 +1,59 @@
+.variable,
+.function {
+  border: 3px solid #e5e500;
+  background-color: yellow;
+  width: min-content;
+  height: min-content;
+  padding: 10px;
+  font-size: 18px;
+  box-shadow: 2px 3px 1.5px grey;
+  margin: 10px;
+}
+
+.variable {
+  background-color: #78f59f;
+  border: 3px solid #42cef5;
+}
+
+#playground {
+  width: 60%;
+  height: 80vh;
+  border: 2px solid grey;
+  overflow-y: scroll;
+  float: left;
+}
+
+#execution {
+  width: 39%;
+  height: 80vh;
+  border: 2px solid grey;
+  overflow-y: scroll;
+  float: left;
+}
+
+#testing {
+  width: 99%;
+  height: 85%;
+  overflow-y: scroll;
+}
+
+#submit_codes {
+  width: 99%;
+  height: 11%;
+  border: 1px solid black;
+  background-color: grey;
+  opacity: 0.8;
+  text-align: center;
+  font-size: 50px;
+  padding-top: 20px;
+}
+
+.ondragel {
+  background-color: blue;
+  opacity: 0.6;
+}
+
+.whiledrag {
+  border-color: blue;
+  border-style: dashed;
+}
