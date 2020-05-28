@@ -15,8 +15,9 @@ class VARIABLE {
 
     let { $node, name } = this;
     if (!$node) {
+      // node가 없을 경우 html element 생성
       $node = document.createElement("div");
-      $node.this = this;
+      $node.object = this;
       $node.id = name;
       $node.innerText = name;
       $node.classList.add("variable", "draggable");
@@ -90,7 +91,7 @@ class FUNCTION {
     if (!$node) {
       // $node가 없으면 html element를 만든다.
       $node = document.createElement("div");
-      $node.this = this;
+      $node.object = this;
       $node.id = name;
       $node.innerText = name + "()";
       $node.classList.add("function", "draggable");
@@ -145,11 +146,11 @@ class FUNCTION {
     let children = this.$node.children;
     let params = [];
     for (let i = 0; i < children.length; i++) {
-      console.log(children[i].this);
-      if (children[i].this instanceof FUNCTION) {
-        params.push(children[i].this.execute());
-      } else if (children[i].this instanceof VARIABLE) {
-        params.push(children[i].this.value);
+      let { object } = children[i];
+      if (object instanceof FUNCTION) {
+        params.push(object.execute());
+      } else if (object instanceof VARIABLE) {
+        params.push(object.value);
       }
     }
     return this.callback(...params);
@@ -252,8 +253,8 @@ document.getElementById("submit_codes").onclick = (e) => {
   e.preventDefault();
   let children = document.getElementById("testing").children;
   for (let i = 0; i < children.length; i++) {
-    if (children[i].this instanceof FUNCTION) {
-      children[i].this.execute();
+    if (children[i].object instanceof FUNCTION) {
+      children[i].object.execute();
     }
   }
 };
