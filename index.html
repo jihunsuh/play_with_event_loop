@@ -9,21 +9,31 @@
   </head>
   <body>
     <div id="app">
-      <div id="add_variable">
-        <input id="variable_name" type="text" />
-        <button id="submit_variable">ADD VARIABLE</button>
+      <div id="playground">
+        <div id="add">
+          <div id="add_variable">
+            <input id="variable_name" type="text" />
+            <button id="submit_variable">ADD VARIABLE</button>
+          </div>
+          <div id="add_function">
+            <input id="function_name" type="text" />
+            <button id="submit_function">ADD FUNCTION</button>
+          </div>
+        </div>
+        <div id="codes"></div>
       </div>
-      <div id="add_function">
-        <input id="function_name" type="text" />
-        <button id="submit_function">ADD FUNCTION</button>
-      </div>
-      <div id="playground"></div>
       <div id="execution">
         <div id="testing"></div>
         <div id="submit_codes">
           실행
         </div>
       </div>
+      <div id="event_loop">
+        <div id="call_stack"></div>
+        <div id="web_api"></div>
+        <div id="callback_queue"></div>
+      </div>
+
       <script src="./script.js"></script>
     </div>
   </body>

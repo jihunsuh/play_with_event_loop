@@ -163,7 +163,7 @@ document.getElementById("submit_variable").onclick = (e) => {
   let value = name;
 
   let variable = new VARIABLE(name, value);
-  variable.setNode("#playground");
+  variable.setNode("#codes");
 
   document.getElementById("variable_name").value = "";
 };
@@ -174,13 +174,13 @@ document.getElementById("submit_function").onclick = (e) => {
   let value = (el) => el;
 
   let func = new FUNCTION(name, value);
-  func.setNode("#playground");
+  func.setNode("#codes");
 
   document.getElementById("function_name").value = "";
 };
 
-document.getElementById("playground").ondragover = (e) => e.preventDefault();
-document.getElementById("playground").ondrop = (e) => {
+document.getElementById("codes").ondragover = (e) => e.preventDefault();
+document.getElementById("codes").ondrop = (e) => {
   e.preventDefault();
   e.target.classList.remove("ondragel");
   if (!e.target.classList.contains("variable")) {
@@ -214,22 +214,22 @@ document.getElementById("testing").ondrop = (e) => {
 let alert_F = new FUNCTION("alert", (...text) => {
   alert(text);
 });
-alert_F.setNode("#playground");
+alert_F.setNode("#codes");
 
 let alert_F2 = new FUNCTION("alert2", (...text) => {
   alert(text);
 });
-alert_F2.setNode("#playground");
+alert_F2.setNode("#codes");
 
 let alert_F3 = new FUNCTION("alert3", (...text) => {
   alert(text);
 });
-alert_F3.setNode("#playground");
+alert_F3.setNode("#codes");
 
 let alert_F4 = new FUNCTION("alert4", (...text) => {
   alert(text);
 });
-alert_F4.setNode("#playground");
+alert_F4.setNode("#codes");
 
 let upperCase_F = new FUNCTION("upperCase", (text) => {
   if (typeof text === "string") {
@@ -238,7 +238,7 @@ let upperCase_F = new FUNCTION("upperCase", (text) => {
     return text;
   }
 });
-upperCase_F.setNode("#playground");
+upperCase_F.setNode("#codes");
 
 let lowerCase_F = new FUNCTION("lowerCase", (text) => {
   if (typeof text === "string") {
@@ -247,7 +247,7 @@ let lowerCase_F = new FUNCTION("lowerCase", (text) => {
     return text;
   }
 });
-lowerCase_F.setNode("#playground");
+lowerCase_F.setNode("#codes");
 
 document.getElementById("submit_codes").onclick = (e) => {
   e.preventDefault();

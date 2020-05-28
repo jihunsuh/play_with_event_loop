@@ -16,38 +16,82 @@
 }
 
 #playground {
-  width: 60%;
+  width: 30%;
   height: 80vh;
   border: 2px solid grey;
-  overflow-y: scroll;
   float: left;
+  margin-left: 5%;
+}
+
+#add {
+  width: auto;
+  padding-left: 27%;
+  border: 1px solid black;
+  height: 7%;
+}
+
+#codes {
+  width: 100%;
+  height: 93%;
+  overflow-y: scroll;
 }
 
 #execution {
-  width: 39%;
+  width: 30%;
   height: 80vh;
   border: 2px solid grey;
-  overflow-y: scroll;
   float: left;
 }
 
 #testing {
-  width: 99%;
-  height: 85%;
+  width: 100%;
+  height: 91%;
   overflow-y: scroll;
 }
 
 #submit_codes {
-  width: 99%;
-  height: 11%;
-  border: 1px solid black;
+  width: 100%;
+  height: 9%;
   background-color: grey;
   opacity: 0.8;
   text-align: center;
   font-size: 50px;
-  padding-top: 20px;
 }
 
+#event_loop {
+  width: 30%;
+  height: 80vh;
+  border: 2px solid black;
+  float: left;
+}
+
+#call_stack,
+#web_api,
+#callback_queue {
+  border: 2px solid black;
+  float: left;
+  margin: 3%;
+}
+
+#call_stack,
+#web_api {
+  width: 40%;
+  height: 60.5%;
+  position: relative;
+  margin-top: 8%;
+}
+
+#call_stack {
+  margin-left: 7%;
+}
+
+#callback_queue {
+  margin-top: 5%;
+  margin-left: 7%;
+  width: 87%;
+  height: 20%;
+  position: relative;
+}
 .ondragel {
   background-color: blue;
   opacity: 0.6;
