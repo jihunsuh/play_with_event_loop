@@ -58,7 +58,7 @@
 .function {
   border: 3px solid #e5e500;
   background-color: yellow;
-  width: min-content;
+  width: max-content;
   height: min-content;
   padding: 10px;
   font-size: 18px;
@@ -69,6 +69,15 @@
 .variable {
   background-color: #78f59f;
   border: 3px solid #42cef5;
+}
+
+.function {
+  vertical-align: text-bottom;
+  display: flex;
+}
+
+.function * {
+  margin-top: 0px;
 }
 
 #playground {
@@ -142,6 +151,11 @@
   margin-top: 8%;
 }
 
+.function_text {
+  display: inline-block;
+  vertical-align: top;
+}
+
 #variable_boolean {
   color: blue;
   width: 153px;
@@ -152,6 +166,12 @@
   margin-left: 7%;
 }
 
+.params {
+  min-height: 20px;
+  min-width: 20px;
+  display: inline-block;
+}
+
 #callback_queue {
   margin-top: 5%;
   margin-left: 7%;
@@ -160,8 +180,7 @@
   position: relative;
 }
 .ondragel {
-  background-color: blue;
-  opacity: 0.6;
+  background-color: rgba(0, 0, 255, 0.6);
 }
 
 .whiledrag {

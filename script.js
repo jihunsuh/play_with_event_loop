@@ -92,7 +92,19 @@ class FUNCTION {
       $node = document.createElement("div");
       $node.object = this;
       $node.id = name;
-      $node.innerText = name + "()";
+      $node.innerText += name + "(";
+      // let innerText1 = document.createElement("span");
+      // innerText1.innerText = name + "(";
+      // innerText1.classList.add("function_text");
+      let params = document.createElement("div");
+      params.classList.add("params");
+      // let innerText2 = document.createElement("span");
+      // innerText2.innerText = ")";
+      // innerText2.classList.add("function_text");
+      // $node.append(innerText1, params, innerText2);
+      $node.appendChild(params);
+      $node.innerHTML += ")";
+
       $node.classList.add("function", "draggable");
       //draggable
       $node.draggable = true;
@@ -121,6 +133,7 @@ class FUNCTION {
       };
       $node.ondrop = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         e.target.classList.remove("ondragel");
 
         if (!e.target.classList.contains("variable")) {
@@ -129,6 +142,9 @@ class FUNCTION {
             e.target.appendChild(document.getElementById(id));
           } catch (error) {}
         }
+      };
+      $node.appendChild = (elem) => {
+        $node.querySelector(".params").appendChild(elem);
       };
       this.$node = $node;
     }
@@ -185,6 +201,7 @@ document.getElementById("submit_function").onclick = (e) => {
 document.getElementById("codes").ondragover = (e) => e.preventDefault();
 document.getElementById("codes").ondrop = (e) => {
   e.preventDefault();
+  e.stopPropagation();
   e.target.classList.remove("ondragel");
   if (!e.target.classList.contains("variable")) {
     let id = e.dataTransfer.getData("id");
@@ -201,6 +218,7 @@ document.getElementById("codes").ondrop = (e) => {
 document.getElementById("testing").ondragover = (e) => e.preventDefault();
 document.getElementById("testing").ondrop = (e) => {
   e.preventDefault();
+  e.stopPropagation();
   e.target.classList.remove("ondragel");
   if (!e.target.classList.contains("variable")) {
     let id = e.dataTransfer.getData("id");
@@ -310,20 +328,64 @@ window.alert = function(message) {
   }
 };
 
-// class CALLSTACK {
-//   constructor(location) {
-//     if (!document.querySelector(location)) throw "내가 있을 자리가 보이지 않음. -CALLSTACK";
-//     this.$spot = document.querySelector(location);
-//     this.stack = [];
-//   }
+window.makeBlockDraggable = function($node, id) {
+  $node.id = id;
+  $node.classList.add("function", "draggable");
+  //draggable
+  $node.draggable = true;
+  $node.ondragstart = (e) => {
+    e.dataTransfer.setData("id", e.target.id);
+    let draggables = document.getElementsByClassName("draggable");
+    for (let i = 0; i < draggables.length; i++) {
+      draggables[i].classList.add("whiledrag");
+    }
+  };
+  $node.ondragover = (e) => e.preventDefault();
+  $node.ondragend = (e) => {
+    e.preventDefault();
+    let draggables = document.getElementsByClassName("draggable");
+    for (let i = 0; i < draggables.length; i++) {
+      draggables[i].classList.remove("whiledrag");
+    }
+  };
+  $node.ondragenter = (e) => {
+    e.preventDefault();
+    e.target.classList.add("ondragel");
+  };
+  $node.ondragleave = (e) => {
+    e.preventDefault();
+    e.target.classList.remove("ondragel");
+  };
+  $node.ondrop = (e) => {
+    e.preventDefault();
+    e.target.classList.remove("ondragel");
 
-//   execute(location, step) {
-//     if (!document.querySelector(location)) throw "내가 실행할 블록들이 보이지 않음. -CALLSTACK";
-//     let children = document.querySelector(location).children;
-//     for (let i = 0; i < children.length; i++) {
-//       if (children[i].object instanceof FUNCTION) {
-//       } else if (children[i].object instanceof VARIABLE) {
-//       }
-//     }
-//   }
-// }
+    if (!e.target.classList.contains("variable")) {
+      let id = e.dataTransfer.getData("id");
+      try {
+        e.target.appendChild(document.getElementById(id));
+      } catch (error) {}
+    }
+  };
+  return $node;
+};
+
+class CALLSTACK {
+  constructor(location) {
+    if (!document.querySelector(location)) throw "내가 있을 자리가 보이지 않음. -CALLSTACK";
+    this.$spot = document.querySelector(location);
+    this.stack = [];
+  }
+
+  execute(location) {
+    if (!document.querySelector(location)) throw "내가 실행할 블록들이 보이지 않음. -CALLSTACK";
+
+    let children = document.querySelector(location).children;
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].object instanceof FUNCTION) {
+        this.stack.push(children[i].object);
+      } else if (children[i].object instanceof VARIABLE) {
+      }
+    }
+  }
+}
