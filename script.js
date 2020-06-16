@@ -44,6 +44,7 @@ function dragable($node) {
 
   $node.ondragenter = (e) => {
     e.preventDefault();
+    console.log(e.target);
     if (e.target.classList.contains("dropable")) {
       e.target.classList.add("ondragel");
     }
@@ -80,8 +81,8 @@ class BLOCK {
     this.type = "block";
 
     this.$node = document.createElement("div");
+    this.$node.innerHTML = name + "<br/>";
     this.$node.id = name;
-    this.$node.textContent = name;
     this.$node.object = this;
     this.$node = dragable(this.$node);
     this.$node.className = "block";
@@ -125,10 +126,11 @@ class BLOCK {
   }
 
   toObj() {
+    let { name, value, type } = this;
     return {
-      name: this.name,
-      value: this.value,
-      type: this.type,
+      name,
+      value,
+      type,
     };
   }
 
@@ -156,9 +158,8 @@ class FUNCBLOCK extends BLOCK {
     this.type = "function";
   }
 
-  call() {
+  call(...params) {
     let child = this.$node.children;
-    let params = [];
     for (let i = 0; i < child.length; i++) {
       if (child[i].object instanceof BLOCK) {
         params.push(child[i].object.call());
@@ -199,10 +200,9 @@ document.getElementById("submit").onclick = (e) => {
 
     if (type === "function") {
       let params = document.getElementById("func_value_params").value;
+      params = params.split(",").map((el) => el.trim());
       let func = document.getElementById("func_value_func").value;
-      eval(`function test(${params}) {
-          ${func}
-        }`);
+      let test = Function(...params, `"use strict"; ${func}`);
 
       let block = new FUNCBLOCK(name, test);
 
@@ -252,8 +252,10 @@ document.addEventListener("keydown", (e) => {
 
 document.getElementById("submit_codes").onclick = (e) => {
   e.preventDefault();
-  let codes = document.querySelector(".call_codes").querySelectorAll(".block");
-  for (let i = 0; i < codes.length; i++) {
-    codes[i].object.call();
+  let child = document.querySelector(".call_codes").children;
+  for (let i = 0; i < child.length; i++) {
+    if (child[i].object instanceof FUNCBLOCK) {
+      child[i].object.call();
+    }
   }
 };
