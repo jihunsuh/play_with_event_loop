@@ -179,7 +179,7 @@ blocks.forEach((el) => {
 dropable(document.querySelector(".playground"));
 dropable(document.querySelector(".call_codes"));
 
-document.getElementById("type").onchange = (e) => {
+document.getElementById("declare_type").onchange = (e) => {
   if (e.target.value === "variable") {
     document.getElementById("var_value").style.display = "inline";
     document.getElementById("func_value").style.display = "none";
@@ -196,9 +196,9 @@ document.getElementById("submit").onclick = (e) => {
   try {
     let name = document.getElementById("name").value;
     if (name === "") throw "이름을 입력해 주세요";
-    let type = document.getElementById("type").value;
+    let declare_type = document.getElementById("declare_type").value;
 
-    if (type === "function") {
+    if (declare_type === "function") {
       let params = document.getElementById("func_value_params").value;
       params = params.split(",").map((el) => el.trim());
       let func = document.getElementById("func_value_func").value;
@@ -209,8 +209,19 @@ document.getElementById("submit").onclick = (e) => {
       blocks.push(block.toObj());
 
       document.querySelector(".playground").appendChild(block.$node);
-    } else if (type === "variable") {
+    } else if (declare_type === "variable") {
       let value = document.getElementById("var_value").value;
+      let type = document.getElementById("type").value;
+      if (type === "number") {
+        value = Number(value);
+      } else if (type === "boolean") {
+        if (value === "0") value = false;
+        if (value === "") value = false;
+        if (value === "null") value = false;
+        if (value === "NaN") value = false;
+        if (value === "undefined") value = false;
+        value = Boolean(value);
+      }
       let block = new VARBLOCK(name, value);
 
       blocks.push(block.toObj());

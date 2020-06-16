@@ -10,13 +10,18 @@
   <body>
       <div id="w3">
         <div id="add_block">
-          <select id="type">
+          <select id="declare_type">
             <option value="variable">변수</option>
             <option value="function">함수</option>
           </select>
           <br /><br />
           let <input type="text" id="name" placeholder="이름" /> =
           <input type="text" id="var_value" />
+          <select id="type">
+            <option value="string" selected>String</option>
+            <option value="number">Number</option>
+            <option value="boolean">Boolean</option>
+          </select>
           <div id="func_value">
             (<input type="text" id="func_value_params" />) => {<br />
             &nbsp;&nbsp;<textarea id="func_value_func"></textarea> <br />}
