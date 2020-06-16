@@ -1,4 +1,4 @@
-window.blocks = [
+let blocks = [
   {
     name: "Apple",
     value: "apple",
@@ -206,14 +206,14 @@ document.getElementById("submit").onclick = (e) => {
 
       let block = new FUNCBLOCK(name, test);
 
-      window.blocks.push(block.toObj());
+      blocks.push(block.toObj());
 
       document.querySelector(".playground").appendChild(block.$node);
     } else if (type === "variable") {
       let value = document.getElementById("var_value").value;
       let block = new VARBLOCK(name, value);
 
-      window.blocks.push(block.toObj());
+      blocks.push(block.toObj());
 
       document.querySelector(".playground").appendChild(block.$node);
     }
