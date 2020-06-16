@@ -32,26 +32,30 @@ class BLOCKSTACK {
     return blocks;
   }
 
-  getStacks(target) {
-    this.stack = [];
+  getStacks(target, param) {
+    let this_params = [];
     let childblocks = this.getChildBlocks(target);
 
     if (target.object instanceof FUNCBLOCK) {
       this.stack.push(() => {
-        target.object.locate(this.$printer);
+        target.object.locate(this.$printer, -1);
       });
     }
     if (childblocks.length !== 0) {
       childblocks.map((el) => {
-        this.getStacks(el);
+        this.getStacks(el, this_params);
       });
     }
-    this.stack.push((...params) => {
-      target.object.call(...params);
-      target.object.locate(".playground");
-    });
+    if (target.object instanceof FUNCBLOCK) {
+      this.stack.push(() => {
+        param.push(target.object.call(...this_params));
+        target.object.locate(".playground");
+      });
+    }
   }
 
-  callOnce() {}
-  next() {}
+  callAll() {}
+  next() {
+    this.stack.shift()();
+  }
 }

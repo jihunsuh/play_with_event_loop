@@ -15,13 +15,14 @@
             <option value="function">함수</option>
           </select>
           <br /><br />
-          let <input type="text" id="name" placeholder="이름" /> =
-          <input type="text" id="var_value" />
+          let <input type="text" id="name" placeholder="이름" /> = <div id="var_value">
+          <input type="text" id="var_value_var" />
           <select id="type">
             <option value="string" selected>String</option>
             <option value="number">Number</option>
             <option value="boolean">Boolean</option>
           </select>
+        </div>
           <div id="func_value">
             (<input type="text" id="func_value_params" />) => {<br />
             &nbsp;&nbsp;<textarea id="func_value_func"></textarea> <br />}

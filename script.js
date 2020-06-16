@@ -44,7 +44,6 @@ function dragable($node) {
 
   $node.ondragenter = (e) => {
     e.preventDefault();
-    console.log(e.target);
     if (e.target.classList.contains("dropable")) {
       e.target.classList.add("ondragel");
     }
@@ -100,9 +99,13 @@ class BLOCK {
     }).bind(this);
   }
 
-  locate(selector) {
+  locate(selector, direction) {
     if (selector instanceof HTMLElement) {
-      selector.appendChild(this.$node);
+      if (direction === -1) {
+        selector.prepend(this.$node);
+      } else {
+        selector.appendChild(this.$node);
+      }
     } else if (typeof selector === "string") {
       if (document.querySelector(selector)) {
         document.querySelector(selector).appendChild(this.$node);
@@ -202,7 +205,7 @@ document.getElementById("submit").onclick = (e) => {
       let params = document.getElementById("func_value_params").value;
       params = params.split(",").map((el) => el.trim());
       let func = document.getElementById("func_value_func").value;
-      let test = Function(...params, `"use strict"; ${func}`);
+      let test = Function(...params, func);
 
       let block = new FUNCBLOCK(name, test);
 
@@ -210,7 +213,7 @@ document.getElementById("submit").onclick = (e) => {
 
       document.querySelector(".playground").appendChild(block.$node);
     } else if (declare_type === "variable") {
-      let value = document.getElementById("var_value").value;
+      let value = document.getElementById("var_value_var").value;
       let type = document.getElementById("type").value;
       if (type === "number") {
         value = Number(value);
@@ -230,7 +233,7 @@ document.getElementById("submit").onclick = (e) => {
     }
 
     document.getElementById("name").value = "";
-    document.getElementById("var_value").value = "";
+    document.getElementById("var_value_var").value = "";
     document.getElementById("func_value_params").value = "";
     document.getElementById("func_value_func").value = "";
   } catch (err) {
