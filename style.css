@@ -1,3 +1,7 @@
+body {
+  box-sizing: border-box;
+}
+
 #alert_modal_background {
   display: none;
   position: fixed; /* Stay in place */
@@ -54,69 +58,92 @@
   cursor: pointer;
 }
 
-.variable,
-.function {
-  border: 3px solid #e5e500;
-  background-color: yellow;
-  width: min-content;
-  height: min-content;
-  padding: 10px;
-  font-size: 18px;
-  box-shadow: 2px 3px 1.5px grey;
-  margin: 10px;
-}
-
-.variable {
-  background-color: #78f59f;
-  border: 3px solid #42cef5;
-}
-
-#playground {
-  width: 30%;
+#w3 {
+  width: 34%;
   height: 80vh;
   border: 2px solid grey;
   float: left;
-  margin-left: 5%;
+  margin-left: 1%;
 }
 
-#add {
+.playground {
   width: auto;
-  border: 1px solid black;
-  height: 7%;
+  border: 3px solid white;
+  height: 60%;
 }
-
-#add_variable,
-#add_function {
-  margin: 0px auto;
-  width: max-content;
-}
-
-#codes {
-  width: 100%;
-  height: 93%;
-  overflow-y: scroll;
-}
-
 #execution {
-  width: 30%;
+  width: 34%;
   height: 80vh;
   border: 2px solid grey;
   float: left;
 }
 
-#testing {
-  width: 100%;
-  height: 91%;
+.call_codes {
+  width: auto;
+  height: 90%;
   overflow-y: scroll;
+  -ms-overflow-style: none;
+  border: 3px solid white;
+  display: block;
+}
+
+.call_codes::-webkit-scrollbar {
+  display: none;
 }
 
 #submit_codes {
-  width: 100%;
+  width: auto;
   height: 9%;
   background-color: grey;
   opacity: 0.8;
   text-align: center;
   font-size: 50px;
+}
+
+#add_block {
+  border: 2px solid grey;
+  width: auto;
+  font-size: 18px;
+  padding: 10px;
+}
+
+#func_value {
+  display: none;
+}
+
+#func_value_func {
+  width: 300px;
+  height: 80px;
+}
+
+.info {
+  display: block;
+  position: absolute;
+  white-space: pre-line;
+  border: 1px solid grey;
+  background-color: aliceblue;
+  padding: 5px;
+}
+
+.block {
+  border: 3px solid #e0ef86;
+  background-color: yellow;
+  padding: 10px 15px;
+  font-size: 18px;
+  box-shadow: 2px 3px 1.5px grey;
+  margin: 10px;
+  display: inline-block;
+}
+
+.variable {
+  background-color: #a1f088;
+  border: 3px solid #5fdec1;
+}
+
+.function {
+  display: block;
+  width: fit-content;
+  margin: 15px 10px;
 }
 
 #event_loop {
@@ -142,12 +169,6 @@
   margin-top: 8%;
 }
 
-#variable_boolean {
-  color: blue;
-  width: 153px;
-  display: none;
-}
-
 #call_stack {
   margin-left: 7%;
 }
@@ -159,6 +180,7 @@
   height: 20%;
   position: relative;
 }
+
 .ondragel {
   background-color: blue;
   opacity: 0.6;

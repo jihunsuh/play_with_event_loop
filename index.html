@@ -8,31 +8,27 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="app">
-      <div id="playground">
-        <div id="add">
-          <div id="add_variable">
-            <select id="type_variable">
-              <option value="number">Number</option>
-              <option value="string">String</option>
-              <option value="boolean">Boolean</option>
-            </select>
-            <select id="variable_boolean">
-              <option value="true">true</option>
-              <option value="false">false</option>
-            </select>
-            <input id="variable_name" type="text" />
-            <button id="submit_variable">ADD VARIABLE</button>
+      <div id="w3">
+        <div id="add_block">
+          <select id="type">
+            <option value="variable">변수</option>
+            <option value="function">함수</option>
+          </select>
+          <br /><br />
+          let <input type="text" id="name" placeholder="이름" /> =
+          <input type="text" id="var_value" />
+          <div id="func_value">
+            (<input type="text" id="func_value_params" />) => {<br />
+            &nbsp;&nbsp;<textarea id="func_value_func"></textarea> <br />}
           </div>
-          <div id="add_function">
-            <input id="function_name" type="text" />
-            <button id="submit_function">ADD FUNCTION</button>
-          </div>
+          <br />
+          <button id="submit">선언</button>
+          <div id="error_message"></div>
         </div>
-        <div id="codes"></div>
+        <div class="playground"></div>
       </div>
       <div id="execution">
-        <div id="testing"></div>
+        <div class="call_codes"></div>
         <div id="submit_codes">
           실행
         </div>
@@ -50,7 +46,7 @@
         <div id="alert_function"></div>
         <div id="alert_message"></div>
       </div>
-    </div>
+    <script src="./alert.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

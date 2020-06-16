@@ -1,329 +1,259 @@
-class VARIABLE {
-  constructor(name, value) {
-    if (typeof name !== "string") throw "내 이름이 string이 아님. -VARIABLE";
-    if (typeof value === "function") throw "나한테 function을 할당하지 말 것. -VARIABLE";
-    if (typeof value === "object") throw "나한테 object를 할당하지 말 것. -VARIABLE";
-    if (document.getElementById(name)) throw "이미 내 이름의 VARIABLE이 있음. -VARIABLE";
+window.blocks = [
+  {
+    name: "Apple",
+    value: "apple",
+    type: "variable",
+  },
+  {
+    name: "Banana",
+    value: "banana",
+    type: "variable",
+  },
+  {
+    name: "Clock",
+    value: "clock",
+    type: "variable",
+  },
+  {
+    name: "alert",
+    value: function(...params) {
+      window.alert(params);
+      return params;
+    },
+    type: "function",
+  },
+];
 
-    this.name = name;
-    this.value = value;
-  }
-
-  setNode(location) {
-    // DOM NODE를 만드는 함수
-    if (!document.querySelector(location)) throw "LOCATION이 정확하지 않음. -VARIABLE";
-
-    let { $node, name } = this;
-    if (!$node) {
-      // node가 없을 경우 html element 생성
-      $node = document.createElement("div");
-      $node.object = this;
-      $node.id = name;
-      $node.innerText = name;
-      $node.classList.add("variable", "draggable");
-      //draggable
-      $node.draggable = true;
-      $node.ondragstart = (e) => {
-        e.dataTransfer.setData("id", e.target.id);
-        let draggables = document.getElementsByClassName("draggable");
-        for (let i = 0; i < draggables.length; i++) {
-          draggables[i].classList.add("whiledrag");
-        }
-      };
-      $node.ondragover = (e) => e.preventDefault();
-      $node.ondragend = (e) => {
-        e.preventDefault();
-        let draggables = document.getElementsByClassName("draggable");
-        for (let i = 0; i < draggables.length; i++) {
-          draggables[i].classList.remove("whiledrag");
-        }
-      };
-      $node.ondragenter = (e) => {
-        e.preventDefault();
-        e.target.classList.add("ondragel");
-      };
-      $node.ondragleave = (e) => {
-        e.preventDefault();
-        e.target.classList.remove("ondragel");
-      };
-      $node.ondrop = (e) => {
-        e.preventDefault();
-        e.target.classList.remove("ondragel");
-
-        if (!e.target.classList.contains("variable")) {
-          let id = e.dataTransfer.getData("id");
-          try {
-            e.target.appendChild(document.getElementById(id));
-          } catch (error) {}
-        }
-      };
-      this.$node = $node;
+function dragable($node) {
+  $node.draggable = true;
+  $node.ondragstart = function(e) {
+    e.dataTransfer.setData("id", e.target.id);
+    let dropables = document.querySelectorAll(".dropable");
+    for (let i = 0; i < dropables.length; i++) {
+      dropables[i].classList.add("whiledrag");
     }
-    //location에 추가
-    document.querySelector(location).appendChild(this.$node);
-  }
+  };
 
-  setValue(value) {
-    // value를 할당한다.
-    if (typeof value === "function")
-      throw `나한테 function을 할당하지 말 것. -VARIABLE ${this.name}`;
-    if (typeof value === "object") throw `나한테 object를 할당하지 말 것. -VARIABLE ${this.name}`;
-    this.value = value;
-  }
+  $node.ondragend = (e) => {
+    e.preventDefault();
+    let draggables = document.getElementsByClassName("dropable");
+    for (let i = 0; i < draggables.length; i++) {
+      draggables[i].classList.remove("whiledrag");
+    }
+  };
+
+  $node.ondragenter = (e) => {
+    e.preventDefault();
+    if (e.target.classList.contains("dropable")) {
+      e.target.classList.add("ondragel");
+    }
+  };
+  $node.ondragleave = (e) => {
+    e.preventDefault();
+    e.target.classList.remove("ondragel");
+  };
+  return $node;
 }
 
-class FUNCTION {
-  constructor(name, callback) {
-    if (typeof name !== "string") throw "내 이름이 string이 아님. -FUNCTION";
-    if (typeof callback !== "function")
-      throw "나한테 function이 아닌 것을 할당하지 말 것. -FUNCTION";
-    if (document.getElementById(name)) throw "이미 내 이름의 FUNCTION이 있음. -FUNCTION";
+function dropable($node) {
+  $node.classList.add("dropable");
+  $node.ondragover = function(e) {
+    e.preventDefault();
+  };
+  $node.ondrop = function(e) {
+    e.preventDefault();
+    if (!e.target.classList.contains("info")) e.stopPropagation();
+    e.target.classList.remove("ondragel");
 
-    this.name = name;
-    this.callback = callback;
+    let id = e.dataTransfer.getData("id");
+    document.getElementById(id).object.locate($node);
+  };
+  return $node;
+}
+
+class BLOCK {
+  constructor(name, value) {
+    if (typeof name !== "string") throw "이름은 문자열로 넣어 주세요";
+    if (document.getElementById(name)) throw "해당하는 이름의 엘리먼트가 이미 존재합니다";
+
+    this.value = value;
+    this.type = "block";
+
+    this.$node = document.createElement("div");
+    this.$node.id = name;
+    this.$node.textContent = name;
+    this.$node.object = this;
+    this.$node = dragable(this.$node);
+    this.$node.className = "block";
+
+    let info = document.createElement("div");
+    info.className = "info";
+    info.textContent = value.toString();
+    info.style.display = "none";
+    this.$node.appendChild(info);
+
+    this.$node.onclick = ((e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.setinfo("toggle");
+    }).bind(this);
   }
 
-  setNode(location) {
-    if (!document.querySelector(location)) throw "LOCATION이 정확하지 않음. -FUNCTION";
-
-    let { $node, name } = this;
-    if (!$node) {
-      // $node가 없으면 html element를 만든다.
-      $node = document.createElement("div");
-      $node.object = this;
-      $node.id = name;
-      $node.innerText = name + "()";
-      $node.classList.add("function", "draggable");
-      //draggable
-      $node.draggable = true;
-      $node.ondragstart = (e) => {
-        e.dataTransfer.setData("id", e.target.id);
-        let draggables = document.getElementsByClassName("draggable");
-        for (let i = 0; i < draggables.length; i++) {
-          draggables[i].classList.add("whiledrag");
-        }
-      };
-      $node.ondragover = (e) => e.preventDefault();
-      $node.ondragend = (e) => {
-        e.preventDefault();
-        let draggables = document.getElementsByClassName("draggable");
-        for (let i = 0; i < draggables.length; i++) {
-          draggables[i].classList.remove("whiledrag");
-        }
-      };
-      $node.ondragenter = (e) => {
-        e.preventDefault();
-        e.target.classList.add("ondragel");
-      };
-      $node.ondragleave = (e) => {
-        e.preventDefault();
-        e.target.classList.remove("ondragel");
-      };
-      $node.ondrop = (e) => {
-        e.preventDefault();
-        e.target.classList.remove("ondragel");
-
-        if (!e.target.classList.contains("variable")) {
-          let id = e.dataTransfer.getData("id");
-          try {
-            e.target.appendChild(document.getElementById(id));
-          } catch (error) {}
-        }
-      };
-      this.$node = $node;
-    }
-    document.querySelector(location).appendChild($node);
-  }
-
-  setFunc(callback) {
-    if (typeof callback !== "function")
-      throw `나한테 function이 아닌 것을 할당하지 말 것. -FUNCTION ${this.name}`;
-    this.callback = callback;
-  }
-
-  execute() {
-    let children = this.$node.children;
-    let params = [];
-    for (let i = 0; i < children.length; i++) {
-      let { object } = children[i];
-      if (object instanceof FUNCTION) {
-        params.push(object.execute());
-      } else if (object instanceof VARIABLE) {
-        params.push(object.value);
+  locate(selector) {
+    if (selector instanceof HTMLElement) {
+      selector.appendChild(this.$node);
+    } else if (typeof selector === "string") {
+      if (document.querySelector(selector)) {
+        document.querySelector(selector).appendChild(this.$node);
       }
     }
-    return this.callback(...params);
+  }
+
+  setinfo(order) {
+    switch (order) {
+      case "toggle":
+        this.$node.querySelector(".info").style.display =
+          this.$node.querySelector(".info").style.display === "none" ? "block" : "none";
+        break;
+      case "show":
+        this.$node.querySelector(".info").style.display = "block";
+        break;
+      case "hide":
+        this.$node.querySelector(".info").style.display = "none";
+        break;
+    }
+  }
+
+  toObj() {
+    return {
+      name: this.name,
+      value: this.value,
+      type: this.type,
+    };
+  }
+
+  call() {}
+}
+
+class VARBLOCK extends BLOCK {
+  constructor(name, value) {
+    super(name, value);
+    this.$node.classList.add("variable");
+    this.type = "variable";
+  }
+
+  call() {
+    return this.value;
   }
 }
 
-document.getElementById("submit_variable").onclick = (e) => {
-  e.preventDefault();
-  let name = document.getElementById("variable_name").value;
-  let value = name;
-
-  if (name) {
-    let variable = new VARIABLE(name, value);
-    variable.setNode("#codes");
+class FUNCBLOCK extends BLOCK {
+  constructor(name, value) {
+    if (typeof value !== "function") throw "적절한 함수를 넣어 주세요";
+    super(name, value);
+    this.$node = dropable(this.$node);
+    this.$node.classList.add("function");
+    this.type = "function";
   }
 
-  document.getElementById("variable_name").value = "";
-};
-
-document.getElementById("submit_function").onclick = (e) => {
-  e.preventDefault();
-  let name = document.getElementById("function_name").value;
-  let value = (el) => el;
-
-  if (name) {
-    let func = new FUNCTION(name, value);
-    func.setNode("#codes");
-  }
-
-  document.getElementById("function_name").value = "";
-};
-
-document.getElementById("codes").ondragover = (e) => e.preventDefault();
-document.getElementById("codes").ondrop = (e) => {
-  e.preventDefault();
-  e.target.classList.remove("ondragel");
-  if (!e.target.classList.contains("variable")) {
-    let id = e.dataTransfer.getData("id");
-    let draggables = document.getElementsByClassName("draggable");
-    for (let i = 0; i < draggables.length; i++) {
-      draggables[i].classList.remove("whiledrag");
+  call() {
+    let child = this.$node.children;
+    let params = [];
+    for (let i = 0; i < child.length; i++) {
+      if (child[i].object instanceof BLOCK) {
+        params.push(child[i].object.call());
+      }
     }
-    try {
-      e.target.appendChild(document.getElementById(id));
-    } catch (error) {}
+    return this.value(...params);
+  }
+}
+
+blocks.forEach((el) => {
+  let block;
+  if (el.type === "function") block = new FUNCBLOCK(el.name, el.value);
+  else if (el.type === "variable") block = new VARBLOCK(el.name, el.value);
+  document.querySelector(".playground").appendChild(block.$node);
+});
+
+dropable(document.querySelector(".playground"));
+dropable(document.querySelector(".call_codes"));
+
+document.getElementById("type").onchange = (e) => {
+  if (e.target.value === "variable") {
+    document.getElementById("var_value").style.display = "inline";
+    document.getElementById("func_value").style.display = "none";
+  } else if (e.target.value === "function") {
+    document.getElementById("var_value").style.display = "none";
+    document.getElementById("func_value").style.display = "inline";
   }
 };
 
-document.getElementById("testing").ondragover = (e) => e.preventDefault();
-document.getElementById("testing").ondrop = (e) => {
+document.getElementById("submit").onclick = (e) => {
   e.preventDefault();
-  e.target.classList.remove("ondragel");
-  if (!e.target.classList.contains("variable")) {
-    let id = e.dataTransfer.getData("id");
-    let draggables = document.getElementsByClassName("draggable");
-    for (let i = 0; i < draggables.length; i++) {
-      draggables[i].classList.remove("whiledrag");
+  document.getElementById("error_message").textContent = "";
+
+  try {
+    let name = document.getElementById("name").value;
+    if (name === "") throw "이름을 입력해 주세요";
+    let type = document.getElementById("type").value;
+
+    if (type === "function") {
+      let params = document.getElementById("func_value_params").value;
+      let func = document.getElementById("func_value_func").value;
+      eval(`function test(${params}) {
+          ${func}
+        }`);
+
+      let block = new FUNCBLOCK(name, test);
+
+      window.blocks.push(block.toObj());
+
+      document.querySelector(".playground").appendChild(block.$node);
+    } else if (type === "variable") {
+      let value = document.getElementById("var_value").value;
+      let block = new VARBLOCK(name, value);
+
+      window.blocks.push(block.toObj());
+
+      document.querySelector(".playground").appendChild(block.$node);
     }
-    try {
-      e.target.appendChild(document.getElementById(id));
-    } catch (error) {}
+
+    document.getElementById("name").value = "";
+    document.getElementById("var_value").value = "";
+    document.getElementById("func_value_params").value = "";
+    document.getElementById("func_value_func").value = "";
+  } catch (err) {
+    document.getElementById("error_message").textContent = err.toString();
+    throw err;
   }
 };
 
-let alert_F = new FUNCTION("alert", (...text) => {
-  alert(text);
-  return text;
-});
-alert_F.setNode("#codes");
-
-let alert_F2 = new FUNCTION("alert2", (...text) => {
-  alert(text);
-  return text;
-});
-alert_F2.setNode("#codes");
-
-let alert_F3 = new FUNCTION("alert3", (...text) => {
-  alert(text);
-  return text;
-});
-alert_F3.setNode("#codes");
-
-let alert_F4 = new FUNCTION("alert4", (...text) => {
-  alert(text);
-  return text;
-});
-alert_F4.setNode("#codes");
-
-let upperCase_F = new FUNCTION("upperCase", (text) => {
-  if (typeof text === "string") {
-    return text.toUpperCase();
-  } else {
-    return text;
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    let blocks = document.getElementsByClassName("block");
+    let isTabed = true;
+    for (let i = 0; i < blocks.length; i++) {
+      if (blocks[i].querySelector(".info").style.display === "none") {
+        isTabed = false;
+      }
+    }
+    if (isTabed) {
+      for (let i = 0; i < blocks.length; i++) {
+        blocks[i].object.setinfo("hide");
+      }
+    } else {
+      for (let i = 0; i < blocks.length; i++) {
+        blocks[i].object.setinfo("show");
+      }
+    }
   }
 });
-upperCase_F.setNode("#codes");
-
-let lowerCase_F = new FUNCTION("lowerCase", (text) => {
-  if (typeof text === "string") {
-    return text.toLowerCase();
-  } else {
-    return text;
-  }
-});
-lowerCase_F.setNode("#codes");
 
 document.getElementById("submit_codes").onclick = (e) => {
   e.preventDefault();
-  let children = document.getElementById("testing").children;
-  for (let i = 0; i < children.length; i++) {
-    if (children[i].object instanceof FUNCTION) {
-      children[i].object.execute();
-    }
+  let codes = document.querySelector(".call_codes").querySelectorAll(".block");
+  for (let i = 0; i < codes.length; i++) {
+    codes[i].object.call();
   }
 };
-
-document.getElementById("type_variable").onchange = (e) => {
-  if (e.target.value === "boolean") {
-    document.getElementById("variable_name").style.display = "none";
-    document.getElementById("variable_boolean").style.display = "inline-block";
-  } else {
-    document.getElementById("variable_name").style.display = "inline-block";
-    document.getElementById("variable_boolean").style.display = "none";
-  }
-};
-
-window.alertStack = [];
-
-function modal_open() {
-  document.getElementById("alert_message").innerText = window.alertStack.shift();
-  document.getElementById("alert_modal_background").style.display = "block";
-}
-
-function modal_close() {
-  if (window.alertStack.length !== 0) {
-    modal_open();
-  } else {
-    document.getElementById("alert_modal_background").style.display = "";
-    document.getElementById("alert_message").innerText = "";
-  }
-}
-
-document.getElementById("alert_modal_close").onclick = (e) => {
-  e.preventDefault();
-  modal_close();
-};
-
-window.onclick = function(event) {
-  if (event.target == document.getElementById("alert_modal_background")) {
-    modal_close();
-  }
-};
-
-window.alert = function(message) {
-  alertStack.push(message);
-  if (document.getElementById("alert_modal_background").style.display === "") {
-    modal_open();
-  }
-};
-
-// class CALLSTACK {
-//   constructor(location) {
-//     if (!document.querySelector(location)) throw "내가 있을 자리가 보이지 않음. -CALLSTACK";
-//     this.$spot = document.querySelector(location);
-//     this.stack = [];
-//   }
-
-//   execute(location, step) {
-//     if (!document.querySelector(location)) throw "내가 실행할 블록들이 보이지 않음. -CALLSTACK";
-//     let children = document.querySelector(location).children;
-//     for (let i = 0; i < children.length; i++) {
-//       if (children[i].object instanceof FUNCTION) {
-//       } else if (children[i].object instanceof VARIABLE) {
-//       }
-//     }
-//   }
-// }
