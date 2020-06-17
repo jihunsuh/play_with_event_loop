@@ -15,8 +15,10 @@
             <option value="function">함수</option>
           </select>
           <br /><br />
-          let <input type="text" id="name" placeholder="이름" /> = <div id="var_value">
-          <input type="text" id="var_value_var" />
+          let <input type="text" class="variable_name" placeholder="이름" /> 
+          = 
+          <div id="var_value">
+          <input type="text" id="var_value_var"/>
           <select id="type">
             <option value="string" selected>String</option>
             <option value="number">Number</option>
@@ -52,9 +54,11 @@
     <div id="alert_modal_background">
       <div id="alert_modal">
         <span id="alert_modal_close">&times;</span>
-        ALERT!
+        <div style="margin-left: auto; margin-right: auto; width:200px;">ALERT!</div>
         <div id="alert_function"></div>
         <div id="alert_message"></div>
+        <span id="alert_modal_skip">전부 닫기</span>
+        <span id="alert_modal_left">0개 대기 중 </span>
       </div>
     <script src="./alert.js"></script>
     <script src="./script.js"></script>

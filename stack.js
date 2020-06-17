@@ -80,5 +80,8 @@ document.getElementById("step_next").onclick = (e) => {
 };
 
 document.getElementById("step_all").onclick = (e) => {
+  if (!stack.next()) {
+    stack.getStacks(".call_codes");
+  }
   stack.callAll();
 };

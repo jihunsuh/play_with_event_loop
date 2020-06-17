@@ -14,6 +14,14 @@ let blocks = [
     value: "clock",
     type: "variable",
   },
+  {
+    name: "alert",
+    value: function alert(...params) {
+      window.alert(params);
+      return params;
+    },
+    type: "function",
+  },
 ];
 
 function dragable($node) {
@@ -176,9 +184,11 @@ dropable(document.querySelector(".call_codes"));
 
 document.getElementById("declare_type").onchange = (e) => {
   if (e.target.value === "variable") {
+    document.querySelector(".function_name").className = "variable_name";
     document.getElementById("var_value").style.display = "inline";
     document.getElementById("func_value").style.display = "none";
   } else if (e.target.value === "function") {
+    document.querySelector(".variable_name").className = "function_name";
     document.getElementById("var_value").style.display = "none";
     document.getElementById("func_value").style.display = "inline";
   }
@@ -189,23 +199,28 @@ document.getElementById("submit").onclick = (e) => {
   document.getElementById("error_message").textContent = "";
 
   try {
-    let name = document.getElementById("name").value;
-    if (name === "") throw "이름을 입력해 주세요";
     let declare_type = document.getElementById("declare_type").value;
 
     if (declare_type === "function") {
+      let name = document.querySelector(".function_name").value;
+      if (name === "") throw "이름을 입력해 주세요";
       let params = document.getElementById("func_value_params").value;
-      params = params.split(",").map((el) => el.trim());
+      // params = params.split(",").map((el) => el.trim()).join(',');
       let func = document.getElementById("func_value_func").value;
-      let anonymous = new Function(...params, func);
-      anonymous.name = name;
+      let funcGenerator = new Function(`return function ${name}(${params}) { 
+        ${func} 
+      }`);
+      let callback = funcGenerator();
 
-      let block = new FUNCBLOCK(name, anonymous);
+      let block = new FUNCBLOCK(name, callback);
 
       blocks.push(block.toObj());
 
       document.querySelector(".playground").appendChild(block.$node);
+      document.querySelector(".function_name").value = "";
     } else if (declare_type === "variable") {
+      let name = document.querySelector(".variable_name").value;
+      if (name === "") throw "이름을 입력해 주세요";
       let value = document.getElementById("var_value_var").value;
       let type = document.getElementById("type").value;
       if (type === "number") {
@@ -223,9 +238,9 @@ document.getElementById("submit").onclick = (e) => {
       blocks.push(block.toObj());
 
       document.querySelector(".playground").appendChild(block.$node);
+      document.querySelector(".variable_name").value = "";
     }
 
-    document.getElementById("name").value = "";
     document.getElementById("var_value_var").value = "";
     document.getElementById("func_value_params").value = "";
     document.getElementById("func_value_func").value = "";

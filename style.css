@@ -2,6 +2,14 @@ body {
   box-sizing: border-box;
 }
 
+input,
+textarea,
+select,
+button {
+  font-size: 15px;
+  padding: 5px;
+}
+
 #alert_modal_background {
   display: none;
   position: fixed; /* Stay in place */
@@ -28,8 +36,6 @@ body {
 }
 
 #alert_message {
-  width: min-content;
-  height: min-content;
   margin: 60px auto;
   text-align: center;
   font-size: 35px;
@@ -40,8 +46,6 @@ body {
   font-size: 35px;
   color: blue;
   text-align: center;
-  width: min-content;
-  height: min-content;
   margin: 0 auto;
 }
 
@@ -51,8 +55,28 @@ body {
   font-size: 28px;
   font-weight: bold;
 }
+
 #alert_modal_close:hover,
 #alert_modal_close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#alert_modal_left {
+  float: right;
+  font-size: 18px;
+  margin-right: 20px;
+}
+
+#alert_modal_skip {
+  float: right;
+  font-size: 18px;
+  color: #aaa;
+}
+
+#alert_modal_skip:hover,
+#alert_modal_skip:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
@@ -69,8 +93,15 @@ body {
 .playground {
   width: auto;
   border: 3px solid white;
-  height: 60%;
+  height: 66%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
 }
+
+.playground::-webkit-scrollbar {
+  display: none;
+}
+
 #execution {
   width: 34%;
   height: 80vh;
@@ -103,8 +134,35 @@ body {
 #add_block {
   border: 2px solid grey;
   width: auto;
-  font-size: 18px;
+  font-size: 20px;
   padding: 10px;
+}
+
+.variable_name {
+  display: inline-block;
+  width: 150px;
+  background-color: #a1f088;
+  border: 3px solid #5fdec1;
+  padding: 10px 15px;
+  font-size: 18px;
+  box-shadow: 2px 3px 1.5px grey;
+  margin: 10px;
+}
+
+.function_name {
+  display: inline-block;
+  margin: 15px 10px;
+  padding: 10px 15px;
+  font-size: 18px;
+  box-shadow: 2px 3px 1.5px grey;
+  margin: 10px;
+  border: 3px solid #e0ef86;
+  background-color: yellow;
+}
+
+#name:focus {
+  outline-offset: 0px;
+  outline: none;
 }
 
 #func_value {
@@ -112,7 +170,7 @@ body {
 }
 
 #func_value_func {
-  width: 300px;
+  width: 500px;
   height: 80px;
 }
 
@@ -126,8 +184,6 @@ body {
 }
 
 .block {
-  border: 3px solid #e0ef86;
-  background-color: yellow;
   padding: 10px 15px;
   font-size: 18px;
   box-shadow: 2px 3px 1.5px grey;
@@ -141,6 +197,8 @@ body {
 }
 
 .function {
+  border: 3px solid #e0ef86;
+  background-color: yellow;
   display: block;
   width: fit-content;
   margin: 15px 10px;
@@ -196,8 +254,7 @@ body {
 }
 
 .ondragel {
-  background-color: #00c5ff;
-  opacity: 0.6;
+  background-color: #7e7eff;
 }
 
 .whiledrag {
