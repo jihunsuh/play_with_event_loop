@@ -93,13 +93,7 @@ button {
 .playground {
   width: auto;
   border: 3px solid white;
-  height: 66%;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-}
-
-.playground::-webkit-scrollbar {
-  display: none;
+  height: 50%;
 }
 
 #execution {
@@ -238,6 +232,13 @@ button {
   height: 20%;
   position: relative;
 } */
+
+#trash {
+  background-color: red;
+  border: 3px solid black;
+  height: 100px;
+  width: 200px;
+}
 
 #debugger {
   border: 1px solid black;

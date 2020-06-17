@@ -62,7 +62,8 @@ function dropable($node) {
   };
   $node.ondrop = function(e) {
     e.preventDefault();
-    if (!e.target.classList.contains("info")) e.stopPropagation();
+    e.stopPropagation();
+    // if (!e.target.classList.contains("info")) e.stopPropagation();
     e.target.classList.remove("ondragel");
 
     let id = e.dataTransfer.getData("id");
@@ -226,6 +227,7 @@ document.getElementById("submit").onclick = (e) => {
       if (type === "number") {
         value = Number(value);
       } else if (type === "boolean") {
+        if (value === "false") value = false;
         if (value === "0") value = false;
         if (value === "") value = false;
         if (value === "null") value = false;
@@ -280,4 +282,14 @@ document.getElementById("submit_codes").onclick = (e) => {
       child[i].object.call();
     }
   }
+};
+
+let trash = document.getElementById("trash");
+dropable(trash);
+trash.ondrop = (e) => {
+  e.preventDefault();
+  e.target.classList.remove("ondragel");
+
+  let id = e.dataTransfer.getData("id");
+  document.getElementById(id).remove();
 };
