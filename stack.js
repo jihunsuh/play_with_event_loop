@@ -53,9 +53,25 @@ class BLOCKSTACK {
       });
     }
   }
-
-  callAll() {}
   next() {
     this.stack.shift()();
   }
+
+  callAll() {
+    for (let i = 0; i < this.stack.length; i++) {
+      window.setTimeout(this.next.bind(this), 1000 * i);
+    }
+  }
 }
+
+function a() {
+  let stack = new BLOCKSTACK("#call_stack");
+  stack.getStacks(".call_codes");
+  for (let i = 0; i < this.stack.length; i++) {
+    return () => {
+      stack.next();
+    };
+  }
+}
+
+document.getElementById("");
