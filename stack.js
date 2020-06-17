@@ -54,7 +54,12 @@ class BLOCKSTACK {
     }
   }
   next() {
-    this.stack.shift()();
+    if (this.stack.length >= 1) {
+      this.stack.shift()();
+      return true;
+    } else {
+      return false;
+    }
   }
 
   callAll() {
@@ -64,14 +69,16 @@ class BLOCKSTACK {
   }
 }
 
-function a() {
-  let stack = new BLOCKSTACK("#call_stack");
-  stack.getStacks(".call_codes");
-  for (let i = 0; i < this.stack.length; i++) {
-    return () => {
-      stack.next();
-    };
-  }
-}
+let stack = new BLOCKSTACK("#call_stack");
+stack.getStacks(".call_codes");
 
-document.getElementById("");
+document.getElementById("step_next").onclick = (e) => {
+  if (!stack.next()) {
+    stack.getStacks(".call_codes");
+    stack.next();
+  }
+};
+
+document.getElementById("step_all").onclick = (e) => {
+  stack.callAll();
+};

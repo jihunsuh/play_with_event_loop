@@ -1,7 +1,8 @@
 window.alertStack = [];
 
 function modal_open() {
-  document.getElementById("alert_message").innerText = window.alertStack.shift();
+  let { message, caller } = window.alertStack.shift();
+  document.getElementById("alert_message").innerText = caller + " : " + message;
   document.getElementById("alert_modal_background").style.display = "block";
 }
 
@@ -26,7 +27,10 @@ window.onclick = function(event) {
 };
 
 window.alert = function(message) {
-  alertStack.push(message);
+  alertStack.push({
+    message,
+    caller: arguments.callee.caller.name,
+  });
   if (document.getElementById("alert_modal_background").style.display === "") {
     modal_open();
   }

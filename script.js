@@ -14,14 +14,6 @@ let blocks = [
     value: "clock",
     type: "variable",
   },
-  {
-    name: "alert",
-    value: function(...params) {
-      window.alert(params);
-      return params;
-    },
-    type: "function",
-  },
 ];
 
 function dragable($node) {
@@ -205,9 +197,10 @@ document.getElementById("submit").onclick = (e) => {
       let params = document.getElementById("func_value_params").value;
       params = params.split(",").map((el) => el.trim());
       let func = document.getElementById("func_value_func").value;
-      let test = Function(...params, func);
+      let anonymous = new Function(...params, func);
+      anonymous.name = name;
 
-      let block = new FUNCBLOCK(name, test);
+      let block = new FUNCBLOCK(name, anonymous);
 
       blocks.push(block.toObj());
 
